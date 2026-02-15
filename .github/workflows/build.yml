@@ -10,3 +10,8 @@ jobs:
         with:
           command: buildozer android debug
           buildozer_version: stable
+      - name: Upload Sovereign Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ORI-SCION-Core
+          path: bin/*.apk
