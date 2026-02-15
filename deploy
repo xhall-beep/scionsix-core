@@ -1,0 +1,3 @@
+#!/data/data/com.termux/files/usr/bin/bash
+cd ~/ori_scion
+./ori deploy 2>/dev/null

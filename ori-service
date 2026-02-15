@@ -1,0 +1,11 @@
+#!/data/data/com.termux/files/usr/bin/bash
+cd ~/ori_scion
+while true; do
+  echo "🔄 ORI SCION BACKGROUND SERVICE RUNNING - $(date)"
+  # Start service with termux-wake-lock to prevent shutdown
+  termux-wake-lock
+  ./ori deploy 2>&1 | tee ~/ori_scion/service.log
+  termux-wake-unlock
+  echo "🔄 SERVICE RESTARTING IN 30 SECONDS..."
+  sleep 30
+done

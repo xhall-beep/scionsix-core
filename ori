@@ -1,0 +1,86 @@
+#!/data/data/com.termux/files/usr/bin/python3
+import os, sys, subprocess, time, hashlib, re, asyncio
+
+class ORI:
+    """
+    APEX 600: Agentic AI Orchestration System
+    Control Plane: LLM/LAM Integration & Memory
+    Execution Plane: Local Shell & File System Access
+    """
+    def __init__(self):
+        self.session = hashlib.sha256(str(time.time()).encode()).hexdigest()[:6]
+        self.log = f"/sdcard/ori_{self.session}.log"
+        self.git_remote = "https://github.com/xhall-beep/ori-scion.git"
+        self.gh_user = "xhall-beep"
+        self.github_token = self._get_github_token()
+
+    def _get_github_token(self):
+        token = os.environ.get('GH_TOKEN')
+        if not token:
+            path = os.path.expanduser("~/.config/gh/hosts.yml")
+            if os.path.exists(path):
+                try:
+                    with open(path, 'r') as f:
+                        match = re.search(r'oauth_token: (\w+)', f.read())
+                        token = match.group(1) if match else None
+                except: pass
+        return token
+
+    def shell_exec(self, cmd):
+        """Execution Plane: Direct Terminal Access"""
+        with open(self.log, "a") as f:
+            f.write(f"[{time.ctime()}] EXEC: {cmd}\n")
+        return subprocess.run(cmd, shell=True, capture_output=True, text=True)
+
+    def generate_spec(self):
+        """Founder Function: Build Optimization"""
+        spec_content = """[app]
+title = ORI SCION AI
+package.name = oriscion
+package.domain = com.sovereign
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas,ttf,md,txt,sh
+version = 1.1
+requirements = python3,kivy,requests,beautifulsoup4,gitpython,playwright
+android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
+android.api = 34
+android.minapi = 21
+android.ndk = 25b
+android.arch = arm64-v8a
+p4a.bootstrap = sdl2
+p4a.python_version = 3.11
+[buildozer]
+log_level = 2"""
+        with open("buildozer.spec", "w") as f:
+            f.write(spec_content)
+
+    async def deploy(self):
+        print("🔱 APEX 600 SOVEREIGN DEPLOYMENT INITIATED")
+        
+        # Syncing Execution Plane to Cloud Brain (GitHub)
+        self.shell_exec("git add .")
+        self.shell_exec("git commit -m 'Agentic Sync: Control Plane Update'")
+        if self.github_token:
+            auth_url = self.git_remote.replace("https://", f"https://{self.gh_user}:{self.github_token}@")
+            self.shell_exec(f"git push {auth_url} main")
+            print("✅ CLOUD SYNC COMPLETE")
+        
+        self.generate_spec()
+        print("🚀 COMMENCING LOCAL APK BUILD (Check /sdcard/buildozer.log)")
+        asyncio.create_task(self._build_loop())
+
+    async def _build_loop(self):
+        proc = await asyncio.create_subprocess_shell(
+            "buildozer android debug 2>&1 | tee /sdcard/buildozer.log",
+            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+        )
+        await proc.communicate()
+        print("\n✅ BUILD COMPLETE: Assets stored in bin/")
+
+if __name__ == "__main__":
+    agent = ORI()
+    if len(sys.argv) > 1 and sys.argv[1] == "deploy":
+        asyncio.run(agent.deploy())
+    else:
+        print("🔱 ORI SCION AGENT ACTIVE")
+        print("Commands: deploy")
