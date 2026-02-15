@@ -15,7 +15,8 @@ jobs:
       - name: Direct Sovereign Build
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          buildozer android debug
+          # The 'yes' pipe bypasses all interactive license prompts
+          yes | buildozer android debug
           
       - name: Upload Sovereign Artifact
         uses: actions/upload-artifact@v4
