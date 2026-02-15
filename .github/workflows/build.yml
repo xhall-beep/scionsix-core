@@ -9,7 +9,6 @@ jobs:
         uses: ArtemSBulgakov/buildozer-action@v1
         with:
           command: buildozer android debug
-          buildozer_version: stable
       - name: Upload Sovereign Artifact
         uses: actions/upload-artifact@v4
         with:
