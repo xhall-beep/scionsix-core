@@ -15,17 +15,10 @@ jobs:
           sudo apt-get install -y build-essential git ffmpeg libgstreamer1.0-dev zip unzip openjdk-17-jdk libltdl-dev
           pip install --upgrade pip buildozer cython==0.29.33
       - name: Build with Buildozer
-        env:
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-          ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.3.13750724
         run: |
-          mkdir -p /usr/local/lib/android/sdk/tools/bin
-          ln -sf /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager /usr/local/lib/android/sdk/tools/bin/sdkmanager
-          yes | /usr/local/lib/android/sdk/tools/bin/sdkmanager --licenses
-          
-          # Force delete old P4A builds that cause ghost failures
-          rm -rf .buildozer/android/platform/python-for-android
-          
+          # The ultimate license bypass
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
           buildozer android debug
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
