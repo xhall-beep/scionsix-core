@@ -1,44 +1,64 @@
+import os
+import threading
 import subprocess
+import logging
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
 from kivy.clock import mainthread
+
+# Augmented Logging Logic
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+logger = logging.getLogger('SovereignAgent')
 
 class SovereignAgent(App):
     def build(self):
-        self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
-        
-        # Terminal Display
-        self.output_log = TextInput(readonly=True, multiline=True, background_color=(0,0,0,1), foreground_color=(0,1,0,1))
-        self.layout.add_widget(self.output_log)
-        
-        # Command Input
-        self.cmd_input = TextInput(hint_text="Enter Terminal Command...", size_hint_y=None, height=100, multiline=False)
-        self.cmd_input.bind(on_text_validate=self.run_command)
-        self.layout.add_widget(self.cmd_input)
-        
-        # Execute Button
-        self.btn = Button(text="COMMENCE EXECUTION", size_hint_y=None, height=100, background_color=(0, 0.7, 0, 1))
-        self.btn.bind(on_release=self.run_command)
-        self.layout.add_widget(self.btn)
-        
-        return self.layout
+        self.title = "ORI SCION - Sovereign Node"
+        self.root = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
-    def run_command(self, instance):
-        cmd = self.cmd_input.text
+        self.scroll_view = ScrollView(size_hint=(1, 0.8))
+        self.output_log = TextInput(
+            text="[SYSTEM] Sovereign Node Online (Android 16)...\n",
+            readonly=True,
+            background_color=(0, 0, 0, 1),
+            foreground_color=(0, 1, 0, 1),
+            size_hint_y=None,
+            font_size='14sp'
+        )
+        self.output_log.bind(minimum_height=self.output_log.setter('height'))
+        self.scroll_view.add_widget(self.output_log)
+
+        self.cmd_input = TextInput(
+            hint_text="Enter Orchestration Command...",
+            multiline=False,
+            size_hint=(1, 0.1),
+            background_color=(0.1, 0.1, 0.1, 1),
+            foreground_color=(1, 1, 1, 1)
+        )
+        self.cmd_input.bind(on_text_validate=self.execute_orchestration)
+
+        self.root.add_widget(self.scroll_view)
+        self.root.add_widget(self.cmd_input)
+        return self.root
+
+    def execute_orchestration(self, instance):
+        cmd = instance.text.strip()
         if not cmd: return
-        self.update_log(f"\n> Executing: {cmd}")
-        
+        self.update_log(f"\n[EXECUTE] > {cmd}")
+        threading.Thread(target=self._run_task, args=(cmd,), daemon=True).start()
+        instance.text = ""
+
+    def _run_task(self, cmd):
         try:
-            # The Bridge: Executing physical terminal commands from the AI Agent
-            result = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
-            self.update_log(result.decode('utf-8'))
+            process = subprocess.Popen(
+                cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            )
+            stdout, stderr = process.communicate()
+            if stdout: self.update_log(stdout)
+            if stderr: self.update_log(f"[ERROR] {stderr}")
         except Exception as e:
-            self.update_log(f"ERROR: {str(e)}")
-        
-        self.cmd_input.text = ""
+            self.update_log(f"[EXCEPTION] {str(e)}")
 
     @mainthread
     def update_log(self, text):
