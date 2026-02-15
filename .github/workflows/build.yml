@@ -19,8 +19,13 @@ jobs:
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.3.13750724
         run: |
-          # Pre-accept licenses to prevent the "Broken Pipe" error
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/local/lib/android/sdk --licenses
+          # Create a symbolic link so Buildozer finds sdkmanager where it expects it
+          mkdir -p /usr/local/lib/android/sdk/tools/bin
+          ln -s /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager /usr/local/lib/android/sdk/tools/bin/sdkmanager
+          
+          # Pre-accept licenses using the bridged path
+          yes | /usr/local/lib/android/sdk/tools/bin/sdkmanager --licenses
+          
           buildozer appclean
           buildozer android debug
       - name: Upload Artifact
