@@ -1,23 +1,23 @@
 name: Build ORI SCION APK
-on:
-  push:
-    branches: [ main ]
-  schedule:
-    - cron: '0 * * * *'  # Run hourly for continuous improvements
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: |
+      - name: Install Buildozer
+        run: |
           sudo apt-get update
-          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 libffi-dev libsqlite3-dev libgdbm-dev libbz2-dev libreadline-dev liblzma-dev
-          pip3 install buildozer cython==0.29.33
-          buildozer android debug
-      - uses: actions/upload-artifact@v3
+          sudo apt-get install -y python3-pip build-essential git python3-setuptools libffi-dev libssl-dev
+          pip install --upgrade buildozer
+      - name: Build with Buildozer
+        run: yes | buildozer android debug
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: oriscion-apk
+          name: package
           path: bin/*.apk
