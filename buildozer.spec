@@ -5,7 +5,7 @@ package.domain = org.svontz
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
-requirements = python3,kivy,android
+requirements = python3,kivy==2.3.0,kivymd,android
 
 # (Host) High-Fidelity Target
 android.api = 35
