@@ -1,4 +1,6 @@
 [app]
+android.sdk_path = /usr/local/lib/android/sdk
+android.ndk_path = /usr/local/lib/android/sdk/ndk/27.3.13750724
 title = ORI SCION AI
 package.name = oriscion
 package.domain = com.sovereign
@@ -9,7 +11,7 @@ requirements = python3,kivy,kivymd,sdl2_ttf,pillow,requests,beautifulsoup4,gitpy
 android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
 android.api = 34
 android.minapi = 24
-android.ndk = 25b
+android.ndk = 27.3.13750724
 android.arch = arm64-v8a
 p4a.bootstrap = sdl2
 p4a.python_version = 3.11

@@ -13,9 +13,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential git ffmpeg libgstreamer1.0-dev zip unzip openjdk-17-jdk
-          pip install --upgrade pip
-          pip install --upgrade buildozer cython==0.29.33
+          pip install --upgrade pip buildozer cython==0.29.33
       - name: Build with Buildozer
+        env:
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+          ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.3.13750724
         run: |
           buildozer appclean
           yes | buildozer android debug
