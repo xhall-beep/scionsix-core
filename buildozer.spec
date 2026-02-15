@@ -1,19 +1,23 @@
 [app]
-# android.sdk_path = 
-# android.ndk_path = 
-title = ORI SCION AI
-package.name = oriscion
-package.domain = com.sovereign
+title = ORI SCION
+package.name = scionsix
+package.domain = org.svontz
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,ttf,md,txt,sh
-version = 1.1
-requirements = python3,kivy,kivymd,sdl2_ttf,pillow,requests,beautifulsoup4,gitpython,playwright
-android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE
+source.include_exts = py,png,jpg,kv,atlas
+version = 0.1
+requirements = python3,kivy
+
+# (Host) High-Fidelity Target
 android.api = 35
-android.minapi = 24
-android.ndk = 27
+android.minapi = 21
+android.sdk = 35
+android.ndk = 27b
 android.archs = arm64-v8a
-p4a.bootstrap = sdl2
-p4a.python_version = 3.11
-[buildozer]
-log_level = 2
+
+# Sovereign Permissions
+android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, QUERY_ALL_PACKAGES
+
+# Build Optimizations
+android.release_artifact = apk
+android.debug_artifact = apk
+p4a.branch = master
