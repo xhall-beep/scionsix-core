@@ -19,8 +19,10 @@ jobs:
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.3.13750724
         run: |
+          # Pre-accept licenses to prevent the "Broken Pipe" error
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/local/lib/android/sdk --licenses
           buildozer appclean
-          yes | buildozer android debug
+          buildozer android debug
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:

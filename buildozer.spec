@@ -12,7 +12,7 @@ android.permissions = CAMERA,VIBRATE,INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERN
 android.api = 35
 android.minapi = 24
 android.ndk = 27.3.13750724
-android.arch = arm64-v8a
+android.archs = arm64-v8a
 p4a.bootstrap = sdl2
 p4a.python_version = 3.11
 [buildozer]
