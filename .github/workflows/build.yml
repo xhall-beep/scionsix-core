@@ -6,6 +6,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup Java 17 (Required for API 35)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          
       - name: System Armament
         run: |
           sudo apt-get update
@@ -15,7 +21,8 @@ jobs:
       - name: Direct Sovereign Build
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # The 'yes' pipe bypasses all interactive license prompts
+          # Force buildozer to use the Java 17 we just installed
+          export JAVA_HOME=$JAVA_HOME_17_X64
           yes | buildozer android debug
           
       - name: Upload Sovereign Artifact
