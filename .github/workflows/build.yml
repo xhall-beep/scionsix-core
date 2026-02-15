@@ -6,17 +6,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install Build Dependencies
+      - name: System Armament
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip build-essential git python3 python3-dev zip unzip zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev tk-dev libgdbm-compat-dev
-          pip3 install --user --upgrade Cython==0.29.33 wheel setuptools
+          sudo apt-get install -y python3-pip build-essential git python3 python3-dev zip unzip zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev tk-dev libgdbm-compat-dev libltdl-dev libtool autoconf
+          pip3 install --user --upgrade Cython==0.29.33 wheel setuptools buildozer
           
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+      - name: Direct Sovereign Build
+        run: |
+          export PATH=$PATH:$HOME/.local/bin
+          buildozer android debug
           
       - name: Upload Sovereign Artifact
         uses: actions/upload-artifact@v4
