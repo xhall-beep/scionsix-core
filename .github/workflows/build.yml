@@ -5,23 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Build with Buildozer (Sovereign Optimized)
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
-          python-version: '3.11'
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git ffmpeg libgstreamer1.0-dev zip unzip openjdk-17-jdk libltdl-dev
-          pip install --upgrade pip buildozer cython==0.29.33
-      - name: Build with Buildozer
-        run: |
-          yes | sdkmanager --sdk_root=$ANDROID_HOME "platforms;android-34" "build-tools;34.0.0"
-          mkdir -p ~/.android && touch ~/.android/repositories.cfg
-          # Commencement of the optimal build
-          buildozer android debug
-      - name: Upload Artifact
+          buildozer_version: stable
+          python_version: 3.11
+          # This action handles all the SDK/NDK/License issues automatically
+          command: buildozer android debug
+      - name: Upload Sovereign Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package
+          name: ORI-SCION-Core
           path: bin/*.apk
