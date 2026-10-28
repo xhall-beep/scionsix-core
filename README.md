@@ -101,3 +101,18 @@ bus-injected blocked command refused, no-secrets scan). One
 portability fix ships with this upgrade: the bus library lookup now
 accepts a sibling checkout named either `apexyx-sovereign` or
 `ApexYX-Sovereign` (the canonical repo name).
+
+## Continuous integration
+
+CI is the **SCION SIX console CI** workflow (`.github/workflows/ci.yml`):
+on every push it checks out this repo beside a sibling
+`ApexYX-Sovereign` checkout (the layout `console.py` expects for the
+bus library), compiles the Python sources, and runs the verification
+suite (`python3 test_scion.py`).
+
+The old **Build ORI SCION APK** workflow was retired on 2026-10-28. It
+built an APK from the superseded Kivy prototype (`main.py`, via
+Buildozer) and its runs fail — four of four on 2026-10-28, each dying
+inside the Buildozer build with exit code 1. The prototype is not the
+product anymore, so its build is not this repo's CI. APK packaging
+lives in SCIONSIX-AI's Gradle pipeline, which passes.
