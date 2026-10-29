@@ -1,0 +1,31 @@
+name: SCION SIX console CI
+
+"on": [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out SCION SIX (this repo)
+        uses: actions/checkout@v4
+        with:
+          path: scionsix-core
+
+      - name: Check out ApexYX-Sovereign (bus library, sibling layout)
+        uses: actions/checkout@v4
+        with:
+          repository: xhall-beep/ApexYX-Sovereign
+          path: ApexYX-Sovereign
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile the Python sources
+        working-directory: scionsix-core
+        run: python -m py_compile console.py test_scion.py
+
+      - name: Run the SCION SIX verification suite
+        working-directory: scionsix-core
+        run: python3 test_scion.py
