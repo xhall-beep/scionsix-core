@@ -55,6 +55,37 @@ a sibling checkout of the ApexYX-Sovereign repo (either
 `apexyx-sovereign` or `ApexYX-Sovereign` capitalisation; override with
 `APEX_BUS_PATH`).
 
+## The vision build (2026-10-28)
+
+The console above was the stated rebuild. The *envisioned* product —
+per SCIONSIX-AI's own idea content — was a Six-Scion orchestrator
+with a Naming Gate and an Agent Foundry. Those are now built, beside
+the console, in the same style (stdlib only, fail-closed, refusals
+that name their rule):
+
+- **`scions.py`** — the six offices (Runner, Scout, Mason, Warden,
+  Keeper, Herald), each chartered for its own kinds of work.
+  `dispatch(work, command)` routes a unit of work to its owning
+  scion and posts it to the bus; `work_once(scion_id)` claims only
+  that office's rows (address + claim filter both enforced) and runs
+  them through the console's streamed, blocklist-checked executor.
+- **`naming_gate.py` + `name_registry.json`** — the Naming Gate as
+  code. A proposed agent/product name is checked against the
+  registry (seeded with the estate's real product/agent names and
+  known external collisions) and rules NG-FORMAT / NG-COLLISION /
+  NG-RESERVED / NG-GENERIC / NG-REGISTRY. It returns a pass or the
+  specific violations; nothing registers without passing.
+- **`foundry.py`** — the Agent Foundry. A definition from the
+  template goes through the Gate; on a pass the agent is registered
+  (registry entry + a bus announcement from the Keeper's office);
+  on a failure the Foundry refuses, names the violations, and
+  changes nothing.
+
+Verify: `python3 test_vision.py` → 9/9 (roster partition, gate
+accept/reject with named rules, Foundry end-to-end both ways, a
+scion dispatch→claim→done round-trip on a temp bus). Full build
+record: `BUILD-REPORT.md`.
+
 ## Usage
 
 ```sh
